@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Earn by Visiting Websites</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+    }
+    header {
+      background-color: #1e293b;
+      color: #ffffff;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .container {
+      padding: 2rem;
+    }
+    .btn {
+      background-color: #4f46e5;
+      color: #f9fafb;
+      padding: 0.7rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    input[type=text], input[type=password], input[type=number], select {
+      padding: 0.6rem;
+      width: 80%;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      border: 1px solid #475569;
+      background-color: #334155;
+      color: #e2e8f0;
+    }
+    .site-box {
+      margin: 1rem 0;
+      padding: 1rem;
+      background-color: #1e293b;
+      border-left: 4px solid #6366f1;
+      border-radius: 8px;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    #loginPage {
+      text-align: center;
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .hidden {
+      display: none;
+    }
+    .withdraw-form {
+      background: #1e293b;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div id="loginOverlay" class="overlay">
+  <div id="loginPage">
+    <h2>Login to Continue</h2>
+    <input type="text" id="username" placeholder="Username" /><br>
+    <input type="password" id="password" placeholder="Password" /><br>
+    <button class="btn" onclick="login()">Login</button>
+    <p id="loginStatus"></p>
+  </div>
+</div><div id="mainContent" style="display:none">
+  <header>
+    <div>Balance: ₹<span id="balance">0</span></div>
+    <div class="menu" onclick="toggleWithdraw()">⋮</div>
+  </header>
+  <div class="container">
+    <h1>Visit Websites & Enter Codes</h1>
+    <div id="linksContainer"></div>
+  </div>
+  <div id="withdrawPage" class="overlay" style="display:none">
+    <div class="withdraw-form">
+      <div class="close-btn" onclick="toggleWithdraw()">✖</div>
+      <h3>Withdraw</h3>
+      <div class="form-group">
+        <label for="method">Choose Method:</label>
+        <select id="method" onchange="updatePaymentFields()">
+          <option value="upi">UPI</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="gplay">Google Play Redeem Code</option>
+        </select>
+      </div>
+      <div class="form-group" id="upiField">
+        <input type="text" id="upi" placeholder="Enter your UPI ID">
+      </div>
+      <div class="form-group hidden" id="bankFields">
+        <input type="text" id="accountNo" placeholder="Bank Account Number"><br>
+        <input type="text" id="ifsc" placeholder="IFSC Code">
+      </div>
+      <div class="form-group hidden" id="gplayField">
+        <input type="text" id="email" placeholder="Enter your Email ID">
+      </div>
+      <div class="form-group">
+        <input type="number" id="amount" placeholder="Enter amount to withdraw">
+      </div>
+      <button class="btn" onclick="withdraw()">Submit</button>
+      <p id="withdrawStatus"></p>
+    </div>
+  </div>
+</div><script>
+function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  const status = document.getElementById("loginStatus");
+  if (user.length < 4 || pass.length < 5) {
+    status.textContent = "❌ Username or password too short.";
+    return;
+  }
+  localStorage.setItem("loggedIn", "true");
+  document.getElementById("loginOverlay").style.display = "none";
+  document.getElementById("mainContent").style.display = "block";
+  initializeApp();
+}
+
+window.onload = function () {
+  if (localStorage.getItem("loggedIn") === "true") {
+    document.getElementById("loginOverlay").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+    initializeApp();
+  }
+};
+
+function initializeApp() {
+  let balance = parseInt(localStorage.getItem("balance")) || 0;
+  const enteredSites = JSON.parse(localStorage.getItem("enteredSites")) || [];
+  document.getElementById("balance").textContent = balance;
+
+  const links = [
+    { name: 'Website 1', url: 'https://indianshortner.in/dGXi', code: 'KDJHFSJVDDGJJVCDHJH' },
+    { name: 'Website 2', url: 'https://indianshortner.in/aZ5gmMv', code: 'KHSJEJHDHSJEJGHH' },
+    { name: 'Website 3', url: 'https://indianshortner.in/XVq4E', code: 'DUKHVGJJCFFGJHHCCC' },
+    { name: 'Website 4', url: 'https://indianshortner.in/CbUjp', code: 'TUJFDGJKNVDDHJJCC' },
+    { name: 'Website 5', url: 'https://indianshortner.in/bmaQ', code: 'KJCXDHJBCDDHJJGDSF' },
+    { name: 'Website 6', url: 'https://indianshortner.in/fueHn', code: 'USYINCDLNFFIKNVCH' },
+    { name: 'Website 7', url: 'https://indianshortner.in/dgCn', code: 'SDGUKNVCXHJMNBV' },
+    { name: 'Website 8', url: 'https://indianshortner.in/F9u8Uu6', code: 'FGUJJVCHJKKJDDRUUFFG' }
+  ];
+
+  const container = document.getElementById("linksContainer");
+  container.innerHTML = '';
+  links.forEach((link, index) => {
+    const siteKey = `site${index}`;
+    const box = document.createElement("div");
+    box.className = "site-box";
+    box.innerHTML = `
+      <a href="${link.url}" target="_blank">${link.name} 🔗</a><br>
+      <input type="text" id="input${index}" placeholder="Enter code here">
+      <button class="btn" onclick="checkCode(${index})">Enter</button>
+      <p id="status${index}"></p>
+    `;
+    container.appendChild(box);
+  });
+}
+
+function checkCode(index) {
+  const input = document.getElementById("input" + index);
+  const status = document.getElementById("status" + index);
+  const siteKey = `site${index}`;
+  let balance = parseInt(localStorage.getItem("balance")) || 0;
+  const enteredSites = JSON.parse(localStorage.getItem("enteredSites")) || [];
+
+  const codes = [
+    'KDJHFSJVDDGJJVCDHJH','KHSJEJHDHSJEJGHH','DUKHVGJJCFFGJHHCCC','TUJFDGJKNVDDHJJCC',
+    'KJCXDHJBCDDHJJGDSF','USYINCDLNFFIKNVCH','SDGUKNVCXHJMNBV','FGUJJVCHJKKJDDRUUFFG']
+
+  if (enteredSites.includes(siteKey)) {
+    status.textContent = "✔️ Code already entered.";
+    return;
+  }
+
+  if (input.value === codes[index]) {
+    balance += 50;
+    enteredSites.push(siteKey);
+    localStorage.setItem("balance", balance);
+    localStorage.setItem("enteredSites", JSON.stringify(enteredSites));
+    document.getElementById("balance").textContent = balance;
+    status.textContent = "✅ ₹50 added to your balance!";
+    input.disabled = true;
+  } else {
+    status.textContent = "❌ Wrong code.";
+  }
+}
+
+function toggleWithdraw() {
+  const el = document.getElementById("withdrawPage");
+  el.style.display = el.style.display === "none" ? "flex" : "none";
+}
+
+function updatePaymentFields() {
+  const method = document.getElementById("method").value;
+
+  // Hide and disable all fields
+  document.getElementById("upiField").classList.add("hidden");
+  document.getElementById("bankFields").classList.add("hidden");
+  document.getElementById("gplayField").classList.add("hidden");
+
+  document.getElementById("upi").disabled = true;
+  document.getElementById("accountNo").disabled = true;
+  document.getElementById("ifsc").disabled = true;
+  document.getElementById("email").disabled = true;
+
+  if (method === "upi") {
+    document.getElementById("upiField").classList.remove("hidden");
+    document.getElementById("upi").disabled = false;
+  } else if (method === "bank") {
+    document.getElementById("bankFields").classList.remove("hidden");
+    document.getElementById("accountNo").disabled = false;
+    document.getElementById("ifsc").disabled = false;
+  } else if (method === "gplay") {
+    document.getElementById("gplayField").classList.remove("hidden");
+    document.getElementById("email").disabled = false;
+  }
+}
+
+function withdraw() {
+  const method = document.getElementById("method").value;
+  const amount = parseInt(document.getElementById("amount").value);
+  const upi = document.getElementById("upi").value.trim();
+  const accountNo = document.getElementById("accountNo").value.trim();
+  const ifsc = document.getElementById("ifsc").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const status = document.getElementById("withdrawStatus");
+  let balance = parseInt(localStorage.getItem("balance")) || 0;
+
+  if (amount < 250) {
+    status.textContent = "❌ Minimum withdrawal amount is ₹250";
+    return;
+  }
+  if (amount > balance) {
+    status.textContent = "❌ Insufficient balance";
+    return;
+  }
+
+  if (method === "upi") {
+    const upiPattern = /^[\w.-]+@[\w.-]+$/;
+    if (!upiPattern.test(upi)) {
+      status.textContent = "❌ Invalid UPI ID";
+      return;
+    }
+  } else if (method === "bank") {
+    if (!/^[0-9]{9,18}$/.test(accountNo)) {
+      status.textContent = "❌ Invalid Account Number";
+      return;
+    }
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
+      status.textContent = "❌ Invalid IFSC Code";
+      return;
+    }
+  } else if (method === "gplay") {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      status.textContent = "❌ Invalid Email Address";
+      return;
+    }
+  }
+
+  balance -= amount;
+  localStorage.setItem("balance", balance);
+  document.getElementById("balance").textContent = balance;
+  status.textContent = "✅ Success, check your wallet/email in 24 hours!";
+}
+</script></body>
+</html>
