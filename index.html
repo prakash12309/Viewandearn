@@ -163,7 +163,6 @@ a:hover {
   </div>
 </div>
 
-<!-- ✅ Popup Message -->
 <div id="popupMessage" class="overlay hidden">
   <div class="withdraw-form" style="text-align: center;">
     <div class="close-btn" onclick="closePopup()">✖</div>
@@ -296,8 +295,8 @@ function withdraw() {
   const status = document.getElementById("withdrawStatus");
   let balance = parseInt(localStorage.getItem("balance")) || 0;
 
-  if (amount < 150) {
-    status.textContent = "❌ Minimum withdrawal amount is ₹150";
+  if (amount < 50) {
+    status.textContent = "❌ Minimum withdrawal amount is ₹50";
     return;
   }
   if (amount > balance) {
