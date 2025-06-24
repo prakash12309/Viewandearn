@@ -252,6 +252,13 @@ function initializeApp() {
     `;
     container.appendChild(box);
   });
+const comingSoonBox = document.createElement("div");
+comingSoonBox.className = "site-box";
+comingSoonBox.innerHTML = `
+  <h3 style="color: #facc15;">🚧 More websites coming soon!</h3>
+  <p>Stay tuned for daily updates with more earning tasks.</p>
+`;
+container.appendChild(comingSoonBox);
 }
 
 function checkCode(index) {
