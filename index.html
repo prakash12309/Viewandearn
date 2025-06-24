@@ -98,14 +98,7 @@
   </style>
 </head>
 <body>
-<!-- Original content remains unchanged below this line -->
-<!-- Paste your existing body and script here as is -->
-<!-- The visual theme is updated only through the styles above -->
 
-<!-- [Paste your full HTML content here or let me paste it all if needed] -->
-
-</body>
-</html>
 <div id="loginOverlay" class="overlay">
   <div id="loginPage">
     <h2>Login to Continue</h2>
@@ -114,7 +107,9 @@
     <button class="btn" onclick="login()">Login</button>
     <p id="loginStatus"></p>
   </div>
-</div><div id="mainContent" style="display:none">
+</div>
+
+<div id="mainContent" style="display:none">
   <header>
     <div>Balance: ₹<span id="balance">0</span></div>
     <div class="menu" onclick="toggleWithdraw()">⋮</div>
@@ -123,7 +118,8 @@
     <h1>Visit Websites & Enter Codes</h1>
     <div id="linksContainer"></div>
   </div>
-  <div id="withdrawPage" class="overlay" style="display:none">
+
+  <div id="withdrawPage" class="overlay hidden">
     <div class="withdraw-form">
       <div class="close-btn" onclick="toggleWithdraw()">✖</div>
       <h3>Withdraw</h3>
@@ -152,7 +148,17 @@
       <p id="withdrawStatus"></p>
     </div>
   </div>
-</div><script>
+</div>
+
+<!-- ✅ Popup Message -->
+<div id="popupMessage" class="overlay hidden">
+  <div class="withdraw-form" style="text-align: center;">
+    <div class="close-btn" onclick="closePopup()">✖</div>
+    <h3 style="color: #22c55e;">₹50 added to your wallet!</h3>
+  </div>
+</div>
+
+<script>
 function login() {
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
@@ -216,7 +222,8 @@ function checkCode(index) {
 
   const codes = [
     'KDJHFSJVDDGJJVCDHJH','KHSJEJHDHSJEJGHH','DUKHVGJJCFFGJHHCCC','TUJFDGJKNVDDHJJCC',
-    'KJCXDHJBCDDHJJGDSF','USYINCDLNFFIKNVCH','SDGUKNVCXHJMNBV','FGUJJVCHJKKJDDRUUFFG']
+    'KJCXDHJBCDDHJJGDSF','USYINCDLNFFIKNVCH','SDGUKNVCXHJMNBV','FGUJJVCHJKKJDDRUUFFG'
+  ];
 
   if (enteredSites.includes(siteKey)) {
     status.textContent = "✔️ Code already entered.";
@@ -231,6 +238,7 @@ function checkCode(index) {
     document.getElementById("balance").textContent = balance;
     status.textContent = "✅ ₹50 added to your balance!";
     input.disabled = true;
+    showPopup();
   } else {
     status.textContent = "❌ Wrong code.";
   }
@@ -238,13 +246,11 @@ function checkCode(index) {
 
 function toggleWithdraw() {
   const el = document.getElementById("withdrawPage");
-  el.style.display = el.style.display === "none" ? "flex" : "none";
+  el.classList.toggle("hidden");
 }
 
 function updatePaymentFields() {
   const method = document.getElementById("method").value;
-
-  // Hide and disable all fields
   document.getElementById("upiField").classList.add("hidden");
   document.getElementById("bankFields").classList.add("hidden");
   document.getElementById("gplayField").classList.add("hidden");
@@ -314,5 +320,14 @@ function withdraw() {
   document.getElementById("balance").textContent = balance;
   status.textContent = "✅ Success, check your wallet/email in 24 hours!";
 }
-</script></body>
+
+function showPopup() {
+  document.getElementById("popupMessage").classList.remove("hidden");
+}
+function closePopup() {
+  document.getElementById("popupMessage").classList.add("hidden");
+}
+</script>
+
+</body>
 </html>
