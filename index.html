@@ -128,7 +128,7 @@ a:hover {
     <div class="menu" onclick="toggleWithdraw()">⋮</div>
   </header>
   <div class="container">
-    <h1>Visit Websites & Enter Codes</h1>
+    <h1>Visit Websites & Enter Codes(₹10 for each website)</h1>
     <div id="linksContainer"></div>
   </div>
 
@@ -167,7 +167,7 @@ a:hover {
 <div id="popupMessage" class="overlay hidden">
   <div class="withdraw-form" style="text-align: center;">
     <div class="close-btn" onclick="closePopup()">✖</div>
-    <h3 style="color: #22c55e;">₹50 added to your wallet!</h3>
+    <h3 style="color: #22c55e;">₹10 added to your wallet!</h3>
   </div>
 </div>
 
@@ -244,12 +244,12 @@ function checkCode(index) {
   }
 
   if (input.value === codes[index]) {
-    balance += 50;
+    balance += 10;
     enteredSites.push(siteKey);
     localStorage.setItem("balance", balance);
     localStorage.setItem("enteredSites", JSON.stringify(enteredSites));
     document.getElementById("balance").textContent = balance;
-    status.textContent = "✅ ₹50 added to your balance!";
+    status.textContent = "✅ ₹10 added to your balance!";
     input.disabled = true;
     showPopup();
   } else {
@@ -296,8 +296,8 @@ function withdraw() {
   const status = document.getElementById("withdrawStatus");
   let balance = parseInt(localStorage.getItem("balance")) || 0;
 
-  if (amount < 250) {
-    status.textContent = "❌ Minimum withdrawal amount is ₹250";
+  if (amount < 150) {
+    status.textContent = "❌ Minimum withdrawal amount is ₹150";
     return;
   }
   if (amount > balance) {
