@@ -96,15 +96,14 @@
       cursor: pointer;
     }
     a {
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-a:hover {
-  color: #22c55e;
-  text-decoration: underline;
-}
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #22c55e;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -118,9 +117,10 @@ a:hover {
     <p id="loginStatus"></p>
   </div>
 </div>
-  <div style="text-align: center; padding: 1rem 0 0.5rem 0; font-size: 2rem; font-weight: bold;">
-    <span style="color: #22c55e;">View</span><span style="color: white;">Mint</span>
-  </div>
+
+<div style="text-align: center; padding: 1rem 0 0.5rem 0; font-size: 2rem; font-weight: bold;">
+  <span style="color: #22c55e;">View</span><span style="color: white;">Mint</span>
+</div>
 
 <div id="mainContent" style="display:none">
   <header>
@@ -128,7 +128,7 @@ a:hover {
     <div class="menu" onclick="toggleWithdraw()">⋮</div>
   </header>
   <div class="container">
-    <h1>Visit Websites & Enter Codes(₹10 for each website)</h1>
+    <h1>Visit Websites & Enter Codes (₹10 for each website)</h1>
     <div id="linksContainer"></div>
   </div>
 
@@ -163,18 +163,28 @@ a:hover {
   </div>
 </div>
 
+<!-- Popups -->
 <div id="popupMessage" class="overlay hidden">
   <div class="withdraw-form" style="text-align: center;">
     <div class="close-btn" onclick="closePopup()">✖</div>
     <h3 style="color: #22c55e;">₹10 added to your wallet!</h3>
   </div>
 </div>
+
+<div id="withdrawPopup" class="overlay hidden">
+  <div class="withdraw-form" style="text-align: center;">
+    <div class="close-btn" onclick="closeWithdrawPopup()">✖</div>
+    <h3 style="color: #22c55e;">Success, check your wallet/email in 24 hours!</h3>
+  </div>
+</div>
+
 <footer>
-    <a href="#">Terms & Conditions</a> |
-    <a href="#">Privacy Policy</a> |
-    <a href="#">Contact Us</a><br/>
-    &copy; 2025 ViewMint
+  <a href="#">Terms & Conditions</a> |
+  <a href="#">Privacy Policy</a> |
+  <a href="#">Contact Us</a><br/>
+  &copy; 2025 ViewMint
 </footer>
+
 <script>
 function login() {
   const user = document.getElementById("username").value.trim();
@@ -212,6 +222,9 @@ function initializeApp() {
     { name: 'Website 6', url: 'https://indianshortner.in/fueHn', code: 'USYINCDLNFFIKNVCH' },
     { name: 'Website 7', url: 'https://indianshortner.in/dgCn', code: 'SDGUKNVCXHJMNBV' },
     { name: 'Website 8', url: 'https://indianshortner.in/F9u8Uu6', code: 'FGUJJVCHJKKJDDRUUFFG' }
+    { name: 'Website 9', url: 'https://indianshortner.in/ojwCY', code: 'SHJNBCFGHJKBCCCJKNBC'}
+    { name: 'Website 10', url: 'https://indianshortner.in/nmpQPiWV', code: 'SFUNFGJJJCFDTYJNCCCF'}
+    { name: 'Websitw 11', url: 'https://indianshortner.in/MzqyWDzY', code: 'FGHJJJBVCDSDTHJBV'}
   ];
 
   const container = document.getElementById("linksContainer");
@@ -254,8 +267,9 @@ function checkCode(index) {
     localStorage.setItem("enteredSites", JSON.stringify(enteredSites));
     document.getElementById("balance").textContent = balance;
     status.textContent = "✅ ₹10 added to your balance!";
-    input.disabled = true;
-    showPopup();
+    input.style.display = "none";
+input.nextElementSibling.style.display = "none";
+showPopup();
   } else {
     status.textContent = "❌ Wrong code.";
   }
@@ -335,7 +349,9 @@ function withdraw() {
   balance -= amount;
   localStorage.setItem("balance", balance);
   document.getElementById("balance").textContent = balance;
-  status.textContent = "✅ Success, check your wallet/email in 24 hours!";
+  status.textContent = "";
+  toggleWithdraw();
+  showWithdrawPopup();
 }
 
 function showPopup() {
@@ -343,6 +359,12 @@ function showPopup() {
 }
 function closePopup() {
   document.getElementById("popupMessage").classList.add("hidden");
+}
+function showWithdrawPopup() {
+  document.getElementById("withdrawPopup").classList.remove("hidden");
+}
+function closeWithdrawPopup() {
+  document.getElementById("withdrawPopup").classList.add("hidden");
 }
 </script>
 
