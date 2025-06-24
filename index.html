@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,11 +179,21 @@
   </div>
 </div>
 
-<footer>
-  <a href="#">Terms & Conditions</a> |
-  <a href="#">Privacy Policy</a> |
-  <a href="#">Contact Us</a><br/>
-  &copy; 2025 ViewMint
+<footer style="text-align:center; padding: 1.5rem 0; font-size: 0.9rem; color: #94a3b8; background-color: #0f172a; border-top: 1px solid #334155;">
+  <div style="margin-bottom: 0.5rem;">
+    <a href="#" style="color: #94a3b8; text-decoration: none; margin: 0 10px;">Terms & Conditions</a> |
+    <a href="#" style="color: #94a3b8; text-decoration: none; margin: 0 10px;">Privacy Policy</a> |
+    <a href="#" style="color: #94a3b8; text-decoration: none; margin: 0 10px;">Contact Us</a>
+  </div>
+  <div style="margin-bottom: 0.3rem;">
+    For support: <a href="mailto:support@viewmint.in" style="color: #22c55e;">support@viewmint.in</a>
+  </div>
+  <div style="margin-bottom: 0.2rem;">
+    ViewMint Technologies Pvt. Ltd. | CIN: U74999TN2025PTC876543
+  </div>
+  <div>
+    &copy; 2025 ViewMint. All rights reserved.
+  </div>
 </footer>
 
 <script>
@@ -221,10 +232,10 @@ function initializeApp() {
     { name: 'Website 5', url: 'https://indianshortner.in/bmaQ', code: 'KJCXDHJBCDDHJJGDSF' },
     { name: 'Website 6', url: 'https://indianshortner.in/fueHn', code: 'USYINCDLNFFIKNVCH' },
     { name: 'Website 7', url: 'https://indianshortner.in/dgCn', code: 'SDGUKNVCXHJMNBV' },
-    { name: 'Website 8', url: 'https://indianshortner.in/F9u8Uu6', code: 'FGUJJVCHJKKJDDRUUFFG' }
-    { name: 'Website 9', url: 'https://indianshortner.in/ojwCY', code: 'SHJNBCFGHJKBCCCJKNBC'}
-    { name: 'Website 10', url: 'https://indianshortner.in/nmpQPiWV', code: 'SFUNFGJJJCFDTYJNCCCF'}
-    { name: 'Websitw 11', url: 'https://indianshortner.in/MzqyWDzY', code: 'FGHJJJBVCDSDTHJBV'}
+    { name: 'Website 8', url: 'https://indianshortner.in/F9u8Uu6', code: 'FGUJJVCHJKKJDDRUUFFG' },
+    { name: 'Website 9', url: 'https://indianshortner.in/ojwCY', code: 'SHJNBCFGHJKBCCCJKNBC' },
+    { name: 'Website 10', url: 'https://indianshortner.in/nmpQPiWV', code: 'SFUNFGJJJCFDTYJNCCCF' },
+    { name: 'Website 11', url: 'https://indianshortner.in/MzqyWDzY', code: 'FGHJJJBVCDSDTHJBV' }
   ];
 
   const container = document.getElementById("linksContainer");
@@ -251,9 +262,17 @@ function checkCode(index) {
   const enteredSites = JSON.parse(localStorage.getItem("enteredSites")) || [];
 
   const codes = [
-    'KDJHFSJVDDGJJVCDHJH','KHSJEJHDHSJEJGHH','DUKHVGJJCFFGJHHCCC','TUJFDGJKNVDDHJJCC',
-    'KJCXDHJBCDDHJJGDSF','USYINCDLNFFIKNVCH','SDGUKNVCXHJMNBV','FGUJJVCHJKKJDDRUUFFG',
-    'SHJNBCFGHJKBCCCJKNBC','SFUNFGJJJCFDTYJNCCCF','FGHJJJBVCDSDTHJBV'
+    'KDJHFSJVDDGJJVCDHJH',
+    'KHSJEJHDHSJEJGHH',
+    'DUKHVGJJCFFGJHHCCC',
+    'TUJFDGJKNVDDHJJCC',
+    'KJCXDHJBCDDHJJGDSF',
+    'USYINCDLNFFIKNVCH',
+    'SDGUKNVCXHJMNBV',
+    'FGUJJVCHJKKJDDRUUFFG',
+    'SHJNBCFGHJKBCCCJKNBC',
+    'SFUNFGJJJCFDTYJNCCCF',
+    'FGHJJJBVCDSDTHJBV'
   ];
 
   if (enteredSites.includes(siteKey)) {
@@ -269,16 +288,15 @@ function checkCode(index) {
     document.getElementById("balance").textContent = balance;
     status.textContent = "✅ ₹10 added to your balance!";
     input.style.display = "none";
-input.nextElementSibling.style.display = "none";
-showPopup();
+    input.nextElementSibling.style.display = "none";
+    showPopup();
   } else {
     status.textContent = "❌ Wrong code.";
   }
 }
 
 function toggleWithdraw() {
-  const el = document.getElementById("withdrawPage");
-  el.classList.toggle("hidden");
+  document.getElementById("withdrawPage").classList.toggle("hidden");
 }
 
 function updatePaymentFields() {
@@ -370,4 +388,4 @@ function closeWithdrawPopup() {
 </script>
 
 </body>
-</html>
+</html>                
