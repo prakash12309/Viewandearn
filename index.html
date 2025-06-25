@@ -155,6 +155,8 @@
     <input type="text" id="username" placeholder="Username" /><br>
     <input type="password" id="password" placeholder="Password" /><br>
     <button class="btn" onclick="login()">Login</button>
+<div class="g-recaptcha" data-sitekey="6LdXRG0rAAAAACjRGFQX6OyBgwyIXJG9mL6Iz6AQ"></div>
+    <form onsubmit="return validateRecaptcha()" method="POST">
     <p id="loginStatus"></p>
   </div>
 </div>
@@ -613,5 +615,16 @@ function showHistory() {
     <p style="color: #94a3b8;">Processing...</p>
   </div>
 </div>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+  function validateRecaptcha() {
+    var response = grecaptcha.getResponse();
+    if (response.length === 0) {
+      alert("Please confirm you're not a robot.");
+      return false;
+    }
+    return true;
+  }
+</script>
 </body>
 </html>
