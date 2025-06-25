@@ -1,4 +1,4 @@
-
+<!-- FULL HTML CODE – ViewMint with 11 websites -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -105,6 +105,46 @@
       color: #22c55e;
       text-decoration: underline;
     }
+.spinner {
+  border: 4px solid #1e293b;
+  border-top: 4px solid #22c55e;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+<style>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #1e293b;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1000;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.dropdown-content div {
+  color: #e2e8f0;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+.dropdown-content div:hover {
+  background-color: #334155;
+}
+.show { display: block; }
   </style>
 </head>
 <body>
@@ -126,11 +166,16 @@
 <div id="mainContent" style="display:none">
   <header>
     <div>Balance: ₹<span id="balance">0</span></div>
-    <div class="menu" onclick="toggleWithdraw()">⋮</div>
+  <div class="dropdown">
+    <div class="menu" onclick="toggleDropdown()">⋮</div>
+    <div id="dropdownMenu" class="dropdown-content">
+      <div onclick="toggleWithdraw()">💸 Withdraw</div>
+      <div onclick="toggleHistory()">📜 Payment History</div>
+    </div>
+  </div>
   </header>
   <div class="container">
-    <h1>Visit Website & Enter the Code!</h1>
-    <h3>(₹10/website)</h3>
+    <h1>Visit Websites & Enter Codes (₹10 for each website)</h1>
     <div id="linksContainer"></div>
   </div>
 
@@ -177,6 +222,13 @@
   <div class="withdraw-form" style="text-align: center;">
     <div class="close-btn" onclick="closeWithdrawPopup()">✖</div>
     <h3 style="color: #22c55e;">Success, check your wallet/email in 24 hours!</h3>
+  </div>
+</div>
+<div id="historyPage" class="overlay hidden">
+  <div class="withdraw-form" style="max-height: 80vh; overflow-y: auto;">
+    <div class="close-btn" onclick="toggleHistory()">✖</div>
+    <h3>Your Payment History</h3>
+    <div id="historyList" style="margin-top: 1rem;"></div>
   </div>
 </div>
 
@@ -253,13 +305,6 @@ function initializeApp() {
     `;
     container.appendChild(box);
   });
-const comingSoonBox = document.createElement("div");
-comingSoonBox.className = "site-box";
-comingSoonBox.innerHTML = `
-  <h3 style="color: #facc15;">🚧 More websites coming soon!</h3>
-  <p>Stay tuned for daily updates with more earning tasks.</p>
-`;
-container.appendChild(comingSoonBox);
 }
 
 function checkCode(index) {
@@ -393,7 +438,180 @@ function showWithdrawPopup() {
 function closeWithdrawPopup() {
   document.getElementById("withdrawPopup").classList.add("hidden");
 }
-</script>
+// Spinner function
+function showSpinnerThen(callback) {
+  document.getElementById("spinnerBox").classList.remove("hidden");
+  setTimeout(() => {
+    document.getElementById("spinnerBox").classList.add("hidden");
+    callback();
+  }, 1500);
+}
 
+// Updated checkCode
+function checkCode(index) {
+  const input = document.getElementById("input" + index);
+  const status = document.getElementById("status" + index);
+  const siteKey = `site${index}`;
+  let balance = parseInt(localStorage.getItem("balance")) || 0;
+  const enteredSites = JSON.parse(localStorage.getItem("enteredSites")) || [];
+
+  const codes = [
+    'KDJHFSJVDDGJJVCDHJH',
+    'KHSJEJHDHSJEJGHH',
+    'DUKHVGJJCFFGJHHCCC',
+    'TUJFDGJKNVDDHJJCC',
+    'KJCXDHJBCDDHJJGDSF',
+    'USYINCDLNFFIKNVCH',
+    'SDGUKNVCXHJMNBV',
+    'FGUJJVCHJKKJDDRUUFFG',
+    'SHJNBCFGHJKBCCCJKNBC',
+    'SFUNFGJJJCFDTYJNCCCF',
+    'FGHJJJBVCDSDTHJBV'
+  ];
+
+  if (enteredSites.includes(siteKey)) {
+    status.textContent = "✔️ Code already entered.";
+    return;
+  }
+
+  if (input.value === codes[index]) {
+    balance += 10;
+    enteredSites.push(siteKey);
+    localStorage.setItem("balance", balance);
+    localStorage.setItem("enteredSites", JSON.stringify(enteredSites));
+    document.getElementById("balance").textContent = balance;
+    input.style.display = "none";
+    input.nextElementSibling.style.display = "none";
+
+    showSpinnerThen(() => {
+      status.textContent = "✅ ₹10 added to your balance!";
+      document.getElementById("popupMessage").classList.remove("hidden");
+    });
+  } else {
+    status.textContent = "❌ Wrong code.";
+  }
+}
+
+// Updated withdraw function
+function withdraw() {
+  const method = document.getElementById("method").value;
+  const amount = parseInt(document.getElementById("amount").value);
+  const upi = document.getElementById("upi").value.trim();
+  const accountNo = document.getElementById("accountNo").value.trim();
+  const ifsc = document.getElementById("ifsc").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const status = document.getElementById("withdrawStatus");
+  let balance = parseInt(localStorage.getItem("balance")) || 0;
+
+  if (amount < 50) {
+    status.textContent = "❌ Minimum withdrawal amount is ₹50";
+    return;
+  }
+  if (amount > balance) {
+    status.textContent = "❌ Insufficient balance";
+    return;
+  }
+
+  if (method === "upi") {
+    const upiPattern = /^[\\w.-]+@[\\w.-]+$/;
+    if (!upiPattern.test(upi)) {
+      status.textContent = "❌ Invalid UPI ID";
+      return;
+    }
+  } else if (method === "bank") {
+    if (!/^[0-9]{9,18}$/.test(accountNo)) {
+      status.textContent = "❌ Invalid Account Number";
+      return;
+    }
+    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
+      status.textContent = "❌ Invalid IFSC Code";
+      return;
+    }
+  } else if (method === "gplay") {
+    const emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+    if (!emailPattern.test(email)) {
+      status.textContent = "❌ Invalid Email Address";
+      return;
+    }
+  }
+
+  balance -= amount;
+  localStorage.setItem("balance", balance);
+  document.getElementById("balance").textContent = balance;
+  status.textContent = "";
+  toggleWithdraw();
+
+  showSpinnerThen(() => {
+    document.getElementById("withdrawPopup").classList.remove("hidden");
+  });
+}
+function toggleDropdown() {
+  document.getElementById("dropdownMenu").classList.toggle("show");
+}
+
+window.onclick = function(event) {
+  if (!event.target.matches('.menu')) {
+    const dropdowns = document.getElementsByClassName("dropdown-content");
+    for (let i = 0; i < dropdowns.length; i++) {
+      const openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+
+function toggleHistory() {
+  const hist = document.getElementById("historyPage");
+  if (hist.classList.contains("hidden")) {
+    showHistory();
+  }
+  hist.classList.toggle("hidden");
+}
+
+function saveHistory(amount, method) {
+  const history = JSON.parse(localStorage.getItem("paymentHistory")) || [];
+  const now = new Date();
+  const record = {
+    date: now.toLocaleString(),
+    amount: amount,
+    method: method,
+    status: "✅ Success"
+  };
+  history.unshift(record);
+  localStorage.setItem("paymentHistory", JSON.stringify(history));
+}
+
+function showHistory() {
+  const container = document.getElementById("historyList");
+  const history = JSON.parse(localStorage.getItem("paymentHistory")) || [];
+  if (history.length === 0) {
+    container.innerHTML = "<p>No history yet.</p>";
+    return;
+  }
+  let html = '<table style="width:100%; border-collapse:collapse;">';
+  html += '<tr><th style="text-align:left; padding:8px;">Date</th><th style="text-align:left; padding:8px;">Amount</th><th style="text-align:left; padding:8px;">Method</th><th style="text-align:left; padding:8px;">Status</th></tr>';
+  history.forEach(entry => {
+    html += `<tr>
+      <td style="padding:8px;">${entry.date}</td>
+      <td style="padding:8px;">₹${entry.amount}</td>
+      <td style="padding:8px;">${entry.method}</td>
+      <td style="padding:8px;">${entry.status}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// Inside withdraw(), after updating balance:
+// saveHistory(amount, method);
+</script>
+<!-- Spinner Box -->
+<div id="spinnerBox" class="overlay hidden">
+  <div class="withdraw-form" style="text-align: center;">
+    <div class="spinner"></div>
+    <p style="color: #94a3b8;">Processing...</p>
+  </div>
+</div>
 </body>
-</html>                
+</html>
