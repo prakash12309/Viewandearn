@@ -150,12 +150,12 @@
 <div id="loginOverlay" class="overlay">
   <div id="loginPage">
     <h2>Login to Continue</h2>
-    <input type="text" id="username" placeholder="Username" /><br>
-    <input type="password" id="password" placeholder="Password" /><br>
-    <button class="btn" onclick="login()">Login</button>
-<div class="g-recaptcha" data-sitekey="6LdXRG0rAAAAACjRGFQX6OyBgwyIXJG9mL6Iz6AQ"></div>
     <form onsubmit="return validateRecaptcha()" method="POST">
-    <p id="loginStatus"></p>
+  <input type="text" id="username" placeholder="Username" /><br>
+  <input type="password" id="password" placeholder="Password" /><br>
+  <div class="g-recaptcha" data-sitekey="6LdXRG0rAAAAACjRGFQX6OyBgwyIXJG9mL6Iz6AQ"></div><br>
+  <button class="btn" onclick="login()">Login</button>
+  <p id="loginStatus"></p>
     </form>
   </div>
 </div>
@@ -266,7 +266,6 @@
   document.getElementById("mainContent").style.display = "block";
   initializeApp();
 }
-};
 
 function initializeApp() {
   let balance = parseInt(localStorage.getItem("balance")) || 0;
@@ -421,28 +420,6 @@ function withdraw() {
   toggleWithdraw();
   showWithdrawPopup();
 }
-
-function showPopup() {
-  document.getElementById("popupMessage").classList.remove("hidden");
-}
-function closePopup() {
-  document.getElementById("popupMessage").classList.add("hidden");
-}
-function showWithdrawPopup() {
-  document.getElementById("withdrawPopup").classList.remove("hidden");
-}
-function closeWithdrawPopup() {
-  document.getElementById("withdrawPopup").classList.add("hidden");
-}
-// Spinner function
-function showSpinnerThen(callback) {
-  document.getElementById("spinnerBox").classList.remove("hidden");
-  setTimeout(() => {
-    document.getElementById("spinnerBox").classList.add("hidden");
-    callback();
-  }, 1500);
-}
-
 // Updated withdraw function
 function withdraw() {
   const method = document.getElementById("method").value;
