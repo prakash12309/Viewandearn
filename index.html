@@ -156,6 +156,7 @@
 <div class="g-recaptcha" data-sitekey="6LdXRG0rAAAAACjRGFQX6OyBgwyIXJG9mL6Iz6AQ"></div>
     <form onsubmit="return validateRecaptcha()" method="POST">
     <p id="loginStatus"></p>
+    </form>
   </div>
 </div>
 
@@ -440,51 +441,6 @@ function showSpinnerThen(callback) {
     document.getElementById("spinnerBox").classList.add("hidden");
     callback();
   }, 1500);
-}
-
-// Updated checkCode
-function checkCode(index) {
-  const input = document.getElementById("input" + index);
-  const status = document.getElementById("status" + index);
-  const siteKey = `site${index}`;
-  let balance = parseInt(localStorage.getItem("balance")) || 0;
-  const enteredSites = JSON.parse(localStorage.getItem("enteredSites")) || [];
-
-  const codes = [
-    'KDJHFSJVDDGJJVCDHJH',
-    'KHSJEJHDHSJEJGHH',
-    'DUKHVGJJCFFGJHHCCC',
-    'TUJFDGJKNVDDHJJCC',
-    'KJCXDHJBCDDHJJGDSF',
-    'USYINCDLNFFIKNVCH',
-    'SDGUKNVCXHJMNBV',
-    'FGUJJVCHJKKJDDRUUFFG',
-    'SHJNBCFGHJKBCCCJKNBC',
-    'SFUNFGJJJCFDTYJNCCCF',
-    'FGHJJJBVCDSDTHJBV'
-  ];
-
-  if (enteredSites.includes(siteKey)) {
-    status.textContent = "✔️ Code already entered.";
-    return;
-  }
-
-  if (input.value === codes[index]) {
-    balance += 10;
-    enteredSites.push(siteKey);
-    localStorage.setItem("balance", balance);
-    localStorage.setItem("enteredSites", JSON.stringify(enteredSites));
-    document.getElementById("balance").textContent = balance;
-    input.style.display = "none";
-    input.nextElementSibling.style.display = "none";
-
-    showSpinnerThen(() => {
-      status.textContent = "✅ ₹10 added to your balance!";
-      document.getElementById("popupMessage").classList.remove("hidden");
-    });
-  } else {
-    status.textContent = "❌ Wrong code.";
-  }
 }
 
 // Updated withdraw function
