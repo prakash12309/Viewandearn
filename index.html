@@ -259,22 +259,26 @@ function login() {
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
   const status = document.getElementById("loginStatus");
+
+  // ✅ reCAPTCHA check
+  const response = grecaptcha.getResponse();
+  if (response.length === 0) {
+    status.textContent = "❌ Please verify you're not a robot.";
+    return;
+  }
+
+  // ✅ Basic validation
   if (user.length < 4 || pass.length < 5) {
     status.textContent = "❌ Username or password too short.";
     return;
   }
+
+  // ✅ Login success
   localStorage.setItem("loggedIn", "true");
   document.getElementById("loginOverlay").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
   initializeApp();
 }
-
-window.onload = function () {
-  if (localStorage.getItem("loggedIn") === "true") {
-    document.getElementById("loginOverlay").style.display = "none";
-    document.getElementById("mainContent").style.display = "block";
-    initializeApp();
-  }
 };
 
 function initializeApp() {
