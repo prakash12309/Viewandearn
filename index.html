@@ -253,32 +253,19 @@
     &copy; 2025 ViewMint. All rights reserved.
   </div>
 </footer>
-  <script>
 function login() {
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
   const status = document.getElementById("loginStatus");
-
-  // ✅ reCAPTCHA validation
-  const response = grecaptcha.getResponse();
-  if (response.length === 0) {
-    status.textContent = "❌ Please verify you're not a robot.";
-    return;
-  }
-
-  // ✅ Username/Password check
   if (user.length < 4 || pass.length < 5) {
     status.textContent = "❌ Username or password too short.";
     return;
   }
-
-  // ✅ Success
   localStorage.setItem("loggedIn", "true");
   document.getElementById("loginOverlay").style.display = "none";
   document.getElementById("mainContent").style.display = "block";
   initializeApp();
 }
-  </script>
 };
 
 function initializeApp() {
