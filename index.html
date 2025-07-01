@@ -423,55 +423,6 @@ function withdraw() {
   toggleWithdraw();
   showWithdrawPopup();
 }
-// Updated withdraw function
-function withdraw() {
-  const method = document.getElementById("method").value;
-  const amount = parseInt(document.getElementById("amount").value);
-  const upi = document.getElementById("upi").value.trim();
-  const accountNo = document.getElementById("accountNo").value.trim();
-  const ifsc = document.getElementById("ifsc").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const status = document.getElementById("withdrawStatus");
-  let balance = parseInt(localStorage.getItem("balance")) || 0;
-
-  if (amount < 50) {
-    status.textContent = "❌ Minimum withdrawal amount is ₹50";
-    return;
-  }
-  if (amount > balance) {
-    status.textContent = "❌ Insufficient balance";
-    return;
-  }
-
-  if (method === "upi") {
-    const upiPattern = /^\w.-]+@[\w.-]+$/;
-    if (!upiPattern.test(upi)) {
-      status.textContent = "❌ Invalid UPI ID";
-      return;
-    }
-  } else if (method === "bank") {
-    if (!/^[0-9]{9,18}$/.test(accountNo)) {
-      status.textContent = "❌ Invalid Account Number";
-      return;
-    }
-    if (!/^[A-Z]{4}0[A-Z0-9]{6}$/.test(ifsc)) {
-      status.textContent = "❌ Invalid IFSC Code";
-      return;
-    }
-  } else if (method === "gplay") {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      status.textContent = "❌ Invalid Email Address";
-      return;
-    }
-  }
-
-  balance -= amount;
-  localStorage.setItem("balance", balance);
-  document.getElementById("balance").textContent = balance;
-  status.textContent = "";
-  toggleWithdraw();
-
   showSpinnerThen(() => {
     document.getElementById("withdrawPopup").classList.remove("hidden");
   });
