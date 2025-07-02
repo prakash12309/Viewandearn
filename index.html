@@ -505,6 +505,14 @@ function showHistory() {
     }
     return true;
   }
+  function showSpinnerThen(callback) {
+  const spinner = document.getElementById("spinnerBox");
+  spinner.classList.remove("hidden");
+  setTimeout(() => {
+    spinner.classList.add("hidden");
+    callback();
+  }, 1500); // You can adjust time here
+  }
 </script>
 </body>
 </html>
