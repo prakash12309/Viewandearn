@@ -153,8 +153,7 @@
     <form onsubmit="return validateRecaptcha()" method="POST">
   <input type="text" id="username" placeholder="Username" /><br>
   <input type="password" id="password" placeholder="Password" /><br>
-  <div class="g-recaptcha" data-sitekey="6Lc6H3QrAAAAAARmmWe1cNVJtOtKT7_DMAd9CTvF"></div><br>
-  <button class="btn" onclick="login()">Login</button>
+ <button class="btn" onclick="login()">Login</button>
   <p id="loginStatus"></p>
     </form>
   </div>
@@ -484,10 +483,6 @@ function showHistory() {
   html += '</table>';
   container.innerHTML = html;
 }
-
-// Inside withdraw(), after updating balance:
-// saveHistory(amount, method);
-</script>
 <!-- Spinner Box -->
 <div id="spinnerBox" class="overlay hidden">
   <div class="withdraw-form" style="text-align: center;">
@@ -495,16 +490,7 @@ function showHistory() {
     <p style="color: #94a3b8;">Processing...</p>
   </div>
 </div>
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script>
-  function validateRecaptcha() {
-    var response = grecaptcha.getResponse();
-    if (response.length === 0) {
-      alert("Please confirm you're not a robot.");
-      return false;
-    }
-    return true;
-  }
+
   function showSpinnerThen(callback) {
   const spinner = document.getElementById("spinnerBox");
   spinner.classList.remove("hidden");
