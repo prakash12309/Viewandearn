@@ -421,12 +421,12 @@ function withdraw() {
   document.getElementById("balance").textContent = balance;
   status.textContent = "";
   toggleWithdraw();
-  showWithdrawPopup();
-}
+
   showSpinnerThen(() => {
     document.getElementById("withdrawPopup").classList.remove("hidden");
   });
-}
+    }
+  }
 function toggleDropdown() {
   document.getElementById("dropdownMenu").classList.toggle("show");
 }
